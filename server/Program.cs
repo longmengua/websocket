@@ -50,22 +50,6 @@ app.UseCors("AllowAllOrigins");
 // Ensure WebSockets middleware is registered
 app.UseWebSockets(); // Make sure this is before app.UseAuthorization()
 
-// WebSocket handling middleware
-app.Use(async (context, next) =>
-{
-    if (context.WebSockets.IsWebSocketRequest)
-    {
-        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-        // Resolve the service from the DI container
-        var webSocketService = context.RequestServices.GetRequiredService<WebSocketService>();
-        await webSocketService.HandleWebSocketConnection(webSocket);
-    }
-    else
-    {
-        await next();
-    }
-});
-
 app.UseAuthorization();
 
 app.MapControllers();

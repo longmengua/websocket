@@ -9,7 +9,7 @@ public class WebSocketService
     {
         var buffer = new byte[1024 * 4];
 
-        if (webSocket.State == WebSocketState.Open)
+        while (webSocket.State == WebSocketState.Open)
         {
             var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
