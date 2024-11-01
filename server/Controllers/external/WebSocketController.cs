@@ -21,7 +21,24 @@ public class WebSocketController : ControllerBase
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
             WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await _webSocketService.HandleWebSocketConnection(webSocket);
+            var buffer = new byte[1024 * 4];
+
+            if (webSocket.State == WebSocketState.Open)
+            {
+                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+                }
+                else
+                {
+                    var receiveMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    var pushMessage = await _webSocketService.ProcessMessages(receiveMessage);
+                    var buff = Encoding.UTF8.GetBytes(pushMessage);
+                    await webSocket.SendAsync(new ArraySegment<byte>(buff), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+            }
         }
         else
         {
