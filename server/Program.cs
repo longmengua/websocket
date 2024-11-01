@@ -6,6 +6,8 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddTransient<WebSocketService, WebSocketService>();
+
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -54,7 +56,9 @@ app.Use(async (context, next) =>
     if (context.WebSockets.IsWebSocketRequest)
     {
         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-        await HandleWebSocketConnection(webSocket);
+        // Resolve the service from the DI container
+        var webSocketService = context.RequestServices.GetRequiredService<WebSocketService>();
+        await webSocketService.HandleWebSocketConnection(webSocket);
     }
     else
     {
@@ -67,28 +71,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// WebSocket connection handling
-async Task HandleWebSocketConnection(WebSocket webSocket)
-{
-    var buffer = new byte[1024 * 4];
-
-    while (webSocket.State == WebSocketState.Open)
-    {
-        var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-        if (result.MessageType == WebSocketMessageType.Close)
-        {
-            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
-        }
-        else
-        {
-            // Process the received message (you can add your own logic here)
-            var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            Console.WriteLine($"Received: {message}");
-
-            // Echo the message back
-            await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
-        }
-    }
-}
