@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "vpDgK0uJJxsA6yezpirJkIZU59ltXxf5UJ4a/uM75T2tn0/dyLqb2la2wllEFD/UMlRLLa6Nh0afTRYxePgOKA==",
+  "success": true,
+  "projectFilePath": "/Users/waltor/project/websocket/server/server.csproj",
+  "expectedPackageFiles": [
+    "/Users/waltor/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/Users/waltor/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/Users/waltor/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/Users/waltor/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/Users/waltor/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/Users/waltor/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
